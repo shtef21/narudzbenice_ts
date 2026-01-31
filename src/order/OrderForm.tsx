@@ -148,7 +148,7 @@ function OrderForm() {
           {/* Order type */}
           <FormControl fullWidth sx={{ mb: 3 }}>
             <InputLabel>Tip narudžbe</InputLabel>
-            <Select label="Tip narudžbe" value={form.orderType}>
+            <Select label="Tip narudžbe" value={form.orderType} onChange={setOrderType}>
               <MenuItem value="">-- Odaberite tip narudžbe --</MenuItem>
               <MenuItem value="Roba">Roba</MenuItem>
               <MenuItem value="Usluga">Usluga</MenuItem>
@@ -196,6 +196,9 @@ function OrderForm() {
             </Button>
             <Button variant="contained" color="warning">
               Prikaži spremljene podatke
+            </Button>
+            <Button variant="contained" color="warning" onClick={resetForm}>
+              Očisti formu
             </Button>
             <Button variant="contained" color="success">
               Prikaži tekst
