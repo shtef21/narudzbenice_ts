@@ -12,10 +12,66 @@ import {
   Stack,
   IconButton,
   Tooltip,
+  type SelectChangeEvent,
 } from "@mui/material";
 import InfoOutlineIcon from '@mui/icons-material/InfoOutline';
+import { useOrderFormContext } from "../context/OrderFormContext";
+import { useEffect } from "react";
+import type { DeliveryType, OrderType } from "../context/orderForm.types";
 
 function OrderForm() {
+  const { state: form, dispatch } = useOrderFormContext()
+
+  const setFormId = (event: React.ChangeEvent<HTMLInputElement>) => dispatch({
+    type: 'setId',
+    payload: parseInt(event.target.value)
+  })
+
+  // Customer
+  const setCustomerOib = (event: React.ChangeEvent<HTMLInputElement>) =>
+    dispatch({ type: 'setCustomerOib', payload: event.target.value })
+  const setCustomerName = (event: React.ChangeEvent<HTMLInputElement>) =>
+    dispatch({ type: 'setCustomerName', payload: event.target.value })
+  const setCustomerAddress = (event: React.ChangeEvent<HTMLInputElement>) =>
+    dispatch({ type: 'setCustomerAddress', payload: event.target.value })
+  const setCustomerEmail = (event: React.ChangeEvent<HTMLInputElement>) =>
+    dispatch({ type: 'setCustomerEmail', payload: event.target.value })
+
+  // Supplier
+  const setSupplierOib = (event: React.ChangeEvent<HTMLInputElement>) =>
+    dispatch({ type: 'setSupplierOib', payload: event.target.value })
+  const setSupplierName = (event: React.ChangeEvent<HTMLInputElement>) =>
+    dispatch({ type: 'setSupplierName', payload: event.target.value })
+  const setSupplierAddress = (event: React.ChangeEvent<HTMLInputElement>) =>
+    dispatch({ type: 'setSupplierAddress', payload: event.target.value })
+
+  // Others
+  const setRegistryNumber = (event: React.ChangeEvent<HTMLInputElement>) =>
+    dispatch({ type: 'setRegistryNumber', payload: event.target.value })
+  const setFormClass = (event: React.ChangeEvent<HTMLInputElement>) =>
+    dispatch({ type: 'setClass', payload: event.target.value })
+  const setRecordNumber = (event: React.ChangeEvent<HTMLInputElement>) =>
+    dispatch({ type: 'setRecordNumber', payload: event.target.value })
+  const setBudgetPosition = (event: React.ChangeEvent<HTMLInputElement>) =>
+    dispatch({ type: 'setBudgetPosition', payload: event.target.value })
+  const setApprovedBy = (event: React.ChangeEvent<HTMLInputElement>) =>
+    dispatch({ type: 'setApprovedBy', payload: event.target.value })
+
+  // DeliveryType (select)
+  const setDelivery = (event: SelectChangeEvent) =>
+    dispatch({ type: 'setDelivery', payload: event.target.value as DeliveryType })
+
+  // OrderType (select)
+  const setOrderType = (event: SelectChangeEvent) =>
+    dispatch({ type: 'setOrderType', payload: event.target.value as OrderType })
+
+  // Reset form (button click)
+  const resetForm = () => dispatch({ type: 'resetForm' })
+
+  useEffect(() => {
+    console.log(form)
+  }, [form])
+
   return (
     <Box bgcolor="#f5f5f5" minHeight="100vh" py={4}>
       <Container maxWidth="md">
@@ -34,50 +90,53 @@ function OrderForm() {
                 </IconButton>
               </Tooltip>
             </Stack>
-            <TextField type="number" placeholder="Unesite broj narudžbenice" defaultValue={1} />
+            <TextField type="number" placeholder="Unesite broj narudžbenice" value={form.id} onChange={setFormId} />
           </Stack>
 
-          {/* Buyer */}
+          {/* Customer */}
           <Stack spacing={2} mb={3}>
             <Typography fontWeight="bold">
               Naručitelj
             </Typography>
-            <TextField defaultValue="83507857596" label="OIB" />
-            <TextField disabled defaultValue="Općina Karojba" label="Naziv" />
-            <TextField
-              disabled
-              defaultValue="Karojba 1, 52424 Motovun"
-              label="Adresa"
-            />
-            <TextField disabled defaultValue="opcina@karojba.hr" label="E-mail" />
+            <TextField label="OIB" value={form.customer.oib} onChange={setCustomerOib} />
+            <TextField label="Naziv" value={form.customer.name} onChange={setCustomerName} />
+            <TextField label="Adresa" value={form.customer.address} onChange={setCustomerAddress} />
+            <TextField label="E-mail" value={form.customer.email} onChange={setCustomerEmail} />
           </Stack>
 
           {/* Supplier */}
           <Stack spacing={2} mb={3}>
             <Typography fontWeight="bold">Dobavljač</Typography>
-            <TextField label="OIB dobavljača" />
-            <TextField label="Naziv dobavljača" />
-            <TextField label="Adresa dobavljača" />
+            <TextField label="OIB dobavljača" value={form.supplier.oib} onChange={setSupplierOib} />
+            <TextField label="Naziv dobavljača" value={form.supplier.oib} onChange={setSupplierName} />
+            <TextField label="Adresa dobavljača" value={form.supplier.oib} onChange={setSupplierAddress} />
           </Stack>
 
-          {/* Ur broj */}
+          {/* Other data */}
+          <Typography fontWeight="bold" mb={3}>Ostalo</Typography>
+
+          {/* Registry number (Urudžbeni broj) */}
           <TextField
             fullWidth
             label="Urudžbeni broj"
+            value={form.registryNumber}
+            onChange={setRegistryNumber}
             sx={{ mb: 3 }}
           />
 
-          {/* Klasa */}
+          {/* Class */}
           <TextField
             fullWidth
             label="Klasa"
+            value={form.class}
+            onChange={setFormClass}
             sx={{ mb: 3 }}
           />
 
-          {/* Delivery */}
+          {/* Delivery type */}
           <FormControl fullWidth sx={{ mb: 3 }}>
             <InputLabel>Dostava</InputLabel>
-            <Select label="Dostava" defaultValue="">
+            <Select label="Dostava" value={form.delivery} onChange={setDelivery}>
               <MenuItem value="">-- Unesite tip dostave --</MenuItem>
               <MenuItem value="Paketna dostava">Paketna dostava</MenuItem>
               <MenuItem value="Prijevoz isporučitelja">Prijevoz isporučitelja</MenuItem>
@@ -86,33 +145,40 @@ function OrderForm() {
             </Select>
           </FormControl>
 
-          {/* Tip narudžbe */}
+          {/* Order type */}
           <FormControl fullWidth sx={{ mb: 3 }}>
             <InputLabel>Tip narudžbe</InputLabel>
-            <Select label="Tip narudžbe" defaultValue="">
+            <Select label="Tip narudžbe" value={form.orderType}>
               <MenuItem value="">-- Odaberite tip narudžbe --</MenuItem>
               <MenuItem value="Roba">Roba</MenuItem>
               <MenuItem value="Usluga">Usluga</MenuItem>
             </Select>
           </FormControl>
 
+          {/* Record number */}
           <TextField
             fullWidth
             label="Evidencijski broj"
+            value={form.recordNumber}
+            onChange={setRecordNumber}
             sx={{ mb: 3 }}
           />
 
+          {/* Budget position */}
           <TextField
             fullWidth
             label="Pozicija iz proračuna"
+            value={form.budgetPosition}
+            onChange={setBudgetPosition}
             sx={{ mb: 3 }}
           />
 
+          {/* Approved by */}
           <TextField
             fullWidth
             label="Narudžbu inicirao i odobrio"
-            defaultValue="Marko Lakošeljac"
-            disabled
+            value={form.approvedBy}
+            onChange={setApprovedBy}
             sx={{ mb: 4 }}
           />
 
