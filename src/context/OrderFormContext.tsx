@@ -89,6 +89,8 @@ export const reducer = (state: OrderFormContextType, action: OrderFormAction): O
         return { ...state, items: [...state.items, generateEmptyItem() ]}
     case 'deleteItem':
         return { ...state, items: state.items.filter((item) => item.uuid !== action.payload)}
+    case 'setItems':
+        return { ...state, items: action.payload }
     case 'resetForm':
         return initialValue
     default:

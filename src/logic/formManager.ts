@@ -1,6 +1,6 @@
 import { useOrderFormContext } from "../context/OrderFormContext"
 import type { SelectChangeEvent } from "@mui/material"
-import type { DeliveryType, OrderType } from "../context/orderForm.types"
+import type { DeliveryType, ItemType, OrderType } from "../context/orderForm.types"
 
 export const useFormManager = () => {
     const { state: form, dispatch } = useOrderFormContext()
@@ -51,6 +51,19 @@ export const useFormManager = () => {
     // Item actions
     const addItem = () => dispatch({ type: 'addItem' })
     const deleteItem = (uuid: string) => dispatch({ type: 'deleteItem', payload: uuid })
+    const updateItems = (newItems: ItemType[]) =>
+        dispatch({
+            type: 'setItems',
+            payload: newItems,
+        })
+    const setItemName = (uuid: string, name: string) =>
+        updateItems(form.items.map((item) => item.uuid !== uuid ? item : { ...item, name: name }))
+    const setItemAmount = (uuid: string, amount: number) =>
+        updateItems(form.items.map((item) => item.uuid !== uuid ? item : { ...item, amount: amount }))
+    const setItemPriceNoPdv = (uuid: string, priceNoPdv: number) =>
+        updateItems(form.items.map((item) => item.uuid !== uuid ? item : { ...item, priceNoPdv: priceNoPdv }))
+    const setItemPdvPtc = (uuid: string, pdvPtc: number) =>
+        updateItems(form.items.map((item) => item.uuid !== uuid ? item : { ...item, pdvPtc: pdvPtc }))
 
     // Reset form (button click)
     const resetForm = () => dispatch({ type: 'resetForm' })
@@ -74,6 +87,10 @@ export const useFormManager = () => {
         setOrderType,
         addItem,
         deleteItem,
+        setItemName,
+        setItemAmount,
+        setItemPriceNoPdv,
+        setItemPdvPtc,
         resetForm,
     }
 }

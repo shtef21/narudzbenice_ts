@@ -53,6 +53,7 @@ export type OrderFormAction =
     | { type: 'setApprovedBy'; payload: string }
     | { type: 'addItem' }
     | { type: 'deleteItem'; payload: string }
+    | { type: 'setItems'; payload: ItemType[] }
     | { type: 'resetForm' }
 
     

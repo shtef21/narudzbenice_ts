@@ -138,26 +138,51 @@ function OrderForm() {
             <Typography variant="h6" mb={1}>Stavke ({form.items.length})</Typography>
           </Box>
 
-          {form.items.map((item, index) => {
-            return (
-              <Paper key={item.uuid} elevation={3} sx={{ p: 2, mb: 3 }}>
-                <Stack spacing={2} mb={3}>
-                  <Typography
-                    fontWeight="bold"
-                    sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}
-                  >
-                    Stavka {index + 1}
-                    <IconButton onClick={() => form.deleteItem(item.uuid)}>
-                      <DeleteIcon />
-                    </IconButton>
-                  </Typography>
-                  <TextField label="OIB dobavljača" value={form.supplier.oib} onChange={form.setSupplierOib} />
-                  <TextField label="Naziv dobavljača" value={form.supplier.oib} onChange={form.setSupplierName} />
-                  <TextField label="Adresa dobavljača" value={form.supplier.oib} onChange={form.setSupplierAddress} />
-                </Stack>
-              </Paper>
-            )
-          })}
+          {form.items.map((item, index) => (
+            <Paper key={item.uuid} elevation={3} sx={{ p: 2, mb: 3 }}>
+              <Stack spacing={2}>
+                <Typography
+                  fontWeight="bold"
+                  sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}
+                >
+                  Stavka {index + 1}
+                  <IconButton onClick={() => form.deleteItem(item.uuid)}>
+                    <DeleteIcon />
+                  </IconButton>
+                </Typography>
+                <TextField
+                  label="Naziv stavke"
+                  value={item.name}
+                  onChange={(e) => form.setItemName(item.uuid, e.target.value)}
+                  fullWidth
+                />
+                <TextField
+                  label="Količina"
+                  type="number"
+                  value={item.amount}
+                  onChange={(e) => form.setItemAmount(item.uuid, Number(e.target.value))}
+                  fullWidth
+                />
+                <TextField
+                  label="Cijena bez PDV-a"
+                  type="number"
+                  value={item.priceNoPdv}
+                  onChange={(e) =>
+                    form.setItemPriceNoPdv(item.uuid, Number(e.target.value))
+                  }
+                  fullWidth
+                />
+                <TextField
+                  label="PDV (%)"
+                  type="number"
+                  value={item.pdvPtc}
+                  onChange={(e) => form.setItemPdvPtc(item.uuid, Number(e.target.value))}
+                  fullWidth
+                />
+              </Stack>
+            </Paper>
+          ))}
+
 
           {/* Buttons */}
           <Stack direction="row" spacing={2} mb={2}>
