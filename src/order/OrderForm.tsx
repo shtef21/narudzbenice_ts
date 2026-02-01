@@ -19,7 +19,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import { useFormManager } from "../logic/formManager";
 import { useGenerator } from "../logic/generator";
 
-function OrderForm() {
+export const OrderForm = () => {
   const form = useFormManager()
   const { previewText, generateText } = useGenerator()
 
@@ -59,8 +59,8 @@ function OrderForm() {
           <Stack spacing={2} mb={3}>
             <Typography fontWeight="bold">Dobavljač</Typography>
             <TextField label="OIB dobavljača" value={form.supplier.oib} onChange={form.setSupplierOib} />
-            <TextField label="Naziv dobavljača" value={form.supplier.oib} onChange={form.setSupplierName} />
-            <TextField label="Adresa dobavljača" value={form.supplier.oib} onChange={form.setSupplierAddress} />
+            <TextField label="Naziv dobavljača" value={form.supplier.name} onChange={form.setSupplierName} />
+            <TextField label="Adresa dobavljača" value={form.supplier.address} onChange={form.setSupplierAddress} />
           </Stack>
 
           {/* Other data */}
@@ -189,6 +189,7 @@ function OrderForm() {
             <Chip label="Dodaj stavku" color="primary" onClick={form.addItem} />
             <Chip label="Očisti formu" color="error" onClick={form.resetForm} />
             <Chip label="Prikaži spremljene podatke" color="warning" onClick={() => {}} />
+            <Chip label="Testni podaci" color="success" onClick={form.mockForm} />
             <Chip label="Prikaži tekst" color="success" onClick={generateText} />
           </Stack>
 
@@ -202,15 +203,15 @@ function OrderForm() {
             Generiraj PDF
           </Button>
 
-          <TextField
-            multiline
-            fullWidth
-            value={previewText}
-          />
+          {previewText && (
+            <TextField
+              multiline
+              fullWidth
+              value={previewText}
+            />
+          )}
         </Paper>
       </Container>
     </Box>
   );
 }
-
-export default OrderForm;

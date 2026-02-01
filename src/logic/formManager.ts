@@ -65,6 +65,9 @@ export const useFormManager = () => {
     const setItemPdvPtc = (uuid: string, pdvPtc: number) =>
         updateItems(form.items.map((item) => item.uuid !== uuid ? item : { ...item, pdvPtc: pdvPtc }))
 
+    // Generate mock form
+    const mockForm = () => dispatch({ type: 'mockForm' })
+
     // Reset form (button click)
     const resetForm = () => dispatch({ type: 'resetForm' })
 
@@ -91,6 +94,7 @@ export const useFormManager = () => {
         setItemAmount,
         setItemPriceNoPdv,
         setItemPdvPtc,
+        mockForm,
         resetForm,
     }
 }

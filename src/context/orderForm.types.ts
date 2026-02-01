@@ -9,30 +9,50 @@ type CustomerType = SupplierType & {
     email: string
 }
 
-export type DeliveryType = 'Packet delivery' | 'Supplier delivery' | 'Customer delivery' | 'Other' | ''
+export type DeliveryType = 'Paketna dostava' | 'Prijevoz isporučitelja' | 'Prijevoz naručitelja' | 'Ostalo' | ''
 
-export type OrderType = 'Goods' | 'Services' | ''
+export type OrderType = 'Roba' | 'Usluga' | ''
 
 export type ItemType = {
     uuid: string
     name: string
-    amount: number | null
-    priceNoPdv: number | null
-    pdvPtc: number | null
+    amount: number
+    priceNoPdv: number
+    pdvPtc: number
 }
 
-export type OrderFormContextType = {
-    id: number
-    customer: CustomerType
-    supplier: SupplierType
-    registryNumber: string
-    class: string
-    delivery: DeliveryType
-    orderType: OrderType
-    recordNumber: string
-    budgetPosition: string
-    approvedBy: string
+type ItemCalculatedType = ItemType & {
+    totalNoPdv: number
+    totalPdvAmount: number
+    totalWithPdv: number
+}
+
+// Base class for order forms
+export type OrderFormContextBaseType = {
+    id: number                 // Broj
+    customer: CustomerType     // Naručitelj
+    supplier: SupplierType     // Dobavljač
+    registryNumber: string     // Ur. broj
+    class: string              // Klasa
+    delivery: DeliveryType     // Dostava
+    orderType: OrderType       // Tip narudžbe
+    recordNumber: string       // Evidencijski broj
+    budgetPosition: string     // Pozicija iz proračuna
+    approvedBy: string         // Odobrio
+}
+
+// Used in OrderFormContext
+export type OrderFormContextType = OrderFormContextBaseType & {
     items: ItemType[]
+}
+
+// Used in form calculations
+export type OrderFormCalculatedType = OrderFormContextBaseType & {
+    calculatedItems: ItemCalculatedType[]
+    formTotalNoPdv: number
+    formTotalPdvAmount: number
+    formGrandTotal: number
+    createdAt: Date
 }
 
 export type OrderFormAction =
@@ -54,6 +74,7 @@ export type OrderFormAction =
     | { type: 'addItem' }
     | { type: 'deleteItem'; payload: string }
     | { type: 'setItems'; payload: ItemType[] }
+    | { type: 'mockForm' }
     | { type: 'resetForm' }
 
     

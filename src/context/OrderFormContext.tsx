@@ -4,9 +4,9 @@ import type { FormContextPropsType, ItemType, OrderFormAction, OrderFormContextT
 const generateEmptyItem = (): ItemType => ({
     uuid: crypto.randomUUID(),
     name: '',
-    amount: null,
-    priceNoPdv: null,
-    pdvPtc: null
+    amount: 0,
+    priceNoPdv: 0,
+    pdvPtc: 0
 })
 
 const initialValue: OrderFormContextType = {
@@ -29,7 +29,7 @@ const initialValue: OrderFormContextType = {
     recordNumber: '',
     budgetPosition: '',
     approvedBy: '',
-    items: [generateEmptyItem()]
+    items: [generateEmptyItem()],
 }
 
 export const reducer = (state: OrderFormContextType, action: OrderFormAction): OrderFormContextType => {
@@ -91,6 +91,37 @@ export const reducer = (state: OrderFormContextType, action: OrderFormAction): O
         return { ...state, items: state.items.filter((item) => item.uuid !== action.payload)}
     case 'setItems':
         return { ...state, items: action.payload }
+    case 'mockForm':
+        return {
+            id: 1,
+            customer: {
+                oib: '124124124',
+                name: 'Ericsson d.o.o',
+                address: 'Krapinska ul. 45, Zagreb',
+                email: 'info@ericsson.com',
+            },
+            supplier: {
+                oib: '123123123',
+                name: 'Infobip d.o.o',
+                address: 'Ulica hrvatskog proljeća 10, Rijeka'
+            },
+            registryNumber: 'Urbr-1',
+            class: new Date().getFullYear().toString(),
+            delivery: 'Prijevoz isporučitelja',
+            orderType: 'Roba',
+            recordNumber: 'Evbroj-23',
+            budgetPosition: 'Poz-124',
+            approvedBy: 'Stjepan S.',
+            items: [
+                {
+                    uuid: crypto.randomUUID(),
+                    name: 'Toner',
+                    amount: 1,
+                    priceNoPdv: 10,
+                    pdvPtc: 25,
+                },
+            ]
+        }
     case 'resetForm':
         return initialValue
     default:
