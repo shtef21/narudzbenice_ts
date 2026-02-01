@@ -12,13 +12,16 @@ import {
   Stack,
   IconButton,
   Tooltip,
+  Chip,
 } from "@mui/material";
 import InfoOutlineIcon from '@mui/icons-material/InfoOutline';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { useFormManager } from "../logic/formManager";
+import { useGenerator } from "../logic/generator";
 
 function OrderForm() {
   const form = useFormManager()
+  const { previewText, generateText } = useGenerator()
 
   return (
     <Box bgcolor="#f5f5f5" minHeight="100vh" py={4}>
@@ -158,16 +161,10 @@ function OrderForm() {
 
           {/* Buttons */}
           <Stack direction="row" spacing={2} mb={2}>
-            <Button variant="contained" onClick={form.addItem}>Dodaj stavku</Button>
-            <Button variant="contained" color="warning">
-              Prikaži spremljene podatke
-            </Button>
-            <Button variant="contained" color="warning" onClick={form.resetForm}>
-              Očisti formu
-            </Button>
-            <Button variant="contained" color="success">
-              Prikaži tekst
-            </Button>
+            <Chip label="Dodaj stavku" color="primary" onClick={form.addItem} />
+            <Chip label="Očisti formu" color="error" onClick={form.resetForm} />
+            <Chip label="Prikaži spremljene podatke" color="warning" onClick={() => {}} />
+            <Chip label="Prikaži tekst" color="success" onClick={generateText} />
           </Stack>
 
           <Button
@@ -175,9 +172,16 @@ function OrderForm() {
             variant="contained"
             color="success"
             size="large"
+            sx={{ mb: 3 }}
           >
             Generiraj PDF
           </Button>
+
+          <TextField
+            multiline
+            fullWidth
+            value={previewText}
+          />
         </Paper>
       </Container>
     </Box>
