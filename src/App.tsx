@@ -15,7 +15,7 @@ export const App = () => {
   }
 
   const handleSnackbarClose = (
-    event: React.SyntheticEvent | Event,
+    _event: React.SyntheticEvent | Event,
     reason?: SnackbarCloseReason
   ) => {
     if (reason === 'clickaway') {
@@ -27,7 +27,7 @@ export const App = () => {
 
   return (
     <OrderFormContextProvider>
-      <OrderForm />
+      <OrderForm openSnackbar={openSnackbar} />
       <Snackbar
         open={snackbarOpen}
         onClose={handleSnackbarClose}

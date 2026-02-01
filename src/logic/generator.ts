@@ -31,6 +31,8 @@ export const useGenerator = () => {
     }, [form])
     const [previewText, setPreviewText] = useState('')
 
+    const clearText = () => setPreviewText('')
+
     const generateText = () => setPreviewText(`
         NARUDŽBENICA ${calculatedForm.id}/${calculatedForm.class}
 
@@ -63,11 +65,12 @@ export const useGenerator = () => {
         Datum: ${formatDate(calculatedForm.createdAt)}
         `.trim().replaceAll(/\n        /g, '\n'))
 
-    const generatePdf = () => ''
+    const generatePdf = () => alert('Not yet implemented')
 
     return {
         previewText,
         generateText,
-        generatePdf
+        clearText,
+        generatePdf,
     }
 }

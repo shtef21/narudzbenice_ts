@@ -18,10 +18,33 @@ import InfoOutlineIcon from '@mui/icons-material/InfoOutline';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { useFormManager } from "../logic/formManager";
 import { useGenerator } from "../logic/generator";
+import { useFormValidator } from "../logic/formValidator";
 
-export const OrderForm = () => {
+type OrderFormProps = {
+  openSnackbar: (message: string) => void
+}
+
+export const OrderForm = ({ openSnackbar }: OrderFormProps) => {
   const form = useFormManager()
-  const { previewText, generateText } = useGenerator()
+  const { previewText, clearText, generateText, generatePdf } = useGenerator()
+  const { snackbarMessage, validateForm } = useFormValidator()
+
+  const handleTextGenerateClick = () => {
+    if (validateForm()) {
+      generateText()
+    } else {
+      clearText()
+      openSnackbar(snackbarMessage)
+    }
+  }
+
+  const handlePdfGenerateClick = () => {
+    if (validateForm()) {
+      generatePdf()
+    } else {
+      openSnackbar(snackbarMessage)
+    }
+  }
 
   return (
     <Box bgcolor="#f5f5f5" minHeight="100vh" py={4}>
@@ -190,7 +213,7 @@ export const OrderForm = () => {
             <Chip label="Očisti formu" color="error" onClick={form.resetForm} />
             <Chip label="Prikaži spremljene podatke" color="warning" onClick={() => {}} />
             <Chip label="Testni podaci" color="success" onClick={form.mockForm} />
-            <Chip label="Prikaži tekst" color="success" onClick={generateText} />
+            <Chip label="Prikaži tekst" color="success" onClick={handleTextGenerateClick} />
           </Stack>
 
           <Button
@@ -199,6 +222,7 @@ export const OrderForm = () => {
             color="success"
             size="large"
             sx={{ mb: 3 }}
+            onClick={handlePdfGenerateClick}
           >
             Generiraj PDF
           </Button>
