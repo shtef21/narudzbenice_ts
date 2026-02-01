@@ -12,65 +12,13 @@ import {
   Stack,
   IconButton,
   Tooltip,
-  type SelectChangeEvent,
 } from "@mui/material";
 import InfoOutlineIcon from '@mui/icons-material/InfoOutline';
-import { useOrderFormContext } from "../context/OrderFormContext";
-import { useEffect } from "react";
-import type { DeliveryType, OrderType } from "../context/orderForm.types";
+import DeleteIcon from '@mui/icons-material/Delete';
+import { useFormManager } from "../logic/formManager";
 
 function OrderForm() {
-  const { state: form, dispatch } = useOrderFormContext()
-
-  const setFormId = (event: React.ChangeEvent<HTMLInputElement>) => dispatch({
-    type: 'setId',
-    payload: parseInt(event.target.value)
-  })
-
-  // Customer
-  const setCustomerOib = (event: React.ChangeEvent<HTMLInputElement>) =>
-    dispatch({ type: 'setCustomerOib', payload: event.target.value })
-  const setCustomerName = (event: React.ChangeEvent<HTMLInputElement>) =>
-    dispatch({ type: 'setCustomerName', payload: event.target.value })
-  const setCustomerAddress = (event: React.ChangeEvent<HTMLInputElement>) =>
-    dispatch({ type: 'setCustomerAddress', payload: event.target.value })
-  const setCustomerEmail = (event: React.ChangeEvent<HTMLInputElement>) =>
-    dispatch({ type: 'setCustomerEmail', payload: event.target.value })
-
-  // Supplier
-  const setSupplierOib = (event: React.ChangeEvent<HTMLInputElement>) =>
-    dispatch({ type: 'setSupplierOib', payload: event.target.value })
-  const setSupplierName = (event: React.ChangeEvent<HTMLInputElement>) =>
-    dispatch({ type: 'setSupplierName', payload: event.target.value })
-  const setSupplierAddress = (event: React.ChangeEvent<HTMLInputElement>) =>
-    dispatch({ type: 'setSupplierAddress', payload: event.target.value })
-
-  // Others
-  const setRegistryNumber = (event: React.ChangeEvent<HTMLInputElement>) =>
-    dispatch({ type: 'setRegistryNumber', payload: event.target.value })
-  const setFormClass = (event: React.ChangeEvent<HTMLInputElement>) =>
-    dispatch({ type: 'setClass', payload: event.target.value })
-  const setRecordNumber = (event: React.ChangeEvent<HTMLInputElement>) =>
-    dispatch({ type: 'setRecordNumber', payload: event.target.value })
-  const setBudgetPosition = (event: React.ChangeEvent<HTMLInputElement>) =>
-    dispatch({ type: 'setBudgetPosition', payload: event.target.value })
-  const setApprovedBy = (event: React.ChangeEvent<HTMLInputElement>) =>
-    dispatch({ type: 'setApprovedBy', payload: event.target.value })
-
-  // DeliveryType (select)
-  const setDelivery = (event: SelectChangeEvent) =>
-    dispatch({ type: 'setDelivery', payload: event.target.value as DeliveryType })
-
-  // OrderType (select)
-  const setOrderType = (event: SelectChangeEvent) =>
-    dispatch({ type: 'setOrderType', payload: event.target.value as OrderType })
-
-  // Reset form (button click)
-  const resetForm = () => dispatch({ type: 'resetForm' })
-
-  useEffect(() => {
-    console.log(form)
-  }, [form])
+  const form = useFormManager()
 
   return (
     <Box bgcolor="#f5f5f5" minHeight="100vh" py={4}>
@@ -90,7 +38,7 @@ function OrderForm() {
                 </IconButton>
               </Tooltip>
             </Stack>
-            <TextField type="number" placeholder="Unesite broj narudžbenice" value={form.id} onChange={setFormId} />
+            <TextField type="number" placeholder="Unesite broj narudžbenice" value={form.id} onChange={form.setFormId} />
           </Stack>
 
           {/* Customer */}
@@ -98,18 +46,18 @@ function OrderForm() {
             <Typography fontWeight="bold">
               Naručitelj
             </Typography>
-            <TextField label="OIB" value={form.customer.oib} onChange={setCustomerOib} />
-            <TextField label="Naziv" value={form.customer.name} onChange={setCustomerName} />
-            <TextField label="Adresa" value={form.customer.address} onChange={setCustomerAddress} />
-            <TextField label="E-mail" value={form.customer.email} onChange={setCustomerEmail} />
+            <TextField label="OIB" value={form.customer.oib} onChange={form.setCustomerOib} />
+            <TextField label="Naziv" value={form.customer.name} onChange={form.setCustomerName} />
+            <TextField label="Adresa" value={form.customer.address} onChange={form.setCustomerAddress} />
+            <TextField label="E-mail" value={form.customer.email} onChange={form.setCustomerEmail} />
           </Stack>
 
           {/* Supplier */}
           <Stack spacing={2} mb={3}>
             <Typography fontWeight="bold">Dobavljač</Typography>
-            <TextField label="OIB dobavljača" value={form.supplier.oib} onChange={setSupplierOib} />
-            <TextField label="Naziv dobavljača" value={form.supplier.oib} onChange={setSupplierName} />
-            <TextField label="Adresa dobavljača" value={form.supplier.oib} onChange={setSupplierAddress} />
+            <TextField label="OIB dobavljača" value={form.supplier.oib} onChange={form.setSupplierOib} />
+            <TextField label="Naziv dobavljača" value={form.supplier.oib} onChange={form.setSupplierName} />
+            <TextField label="Adresa dobavljača" value={form.supplier.oib} onChange={form.setSupplierAddress} />
           </Stack>
 
           {/* Other data */}
@@ -120,7 +68,7 @@ function OrderForm() {
             fullWidth
             label="Urudžbeni broj"
             value={form.registryNumber}
-            onChange={setRegistryNumber}
+            onChange={form.setRegistryNumber}
             sx={{ mb: 3 }}
           />
 
@@ -129,14 +77,14 @@ function OrderForm() {
             fullWidth
             label="Klasa"
             value={form.class}
-            onChange={setFormClass}
+            onChange={form.setFormClass}
             sx={{ mb: 3 }}
           />
 
           {/* Delivery type */}
           <FormControl fullWidth sx={{ mb: 3 }}>
             <InputLabel>Dostava</InputLabel>
-            <Select label="Dostava" value={form.delivery} onChange={setDelivery}>
+            <Select label="Dostava" value={form.delivery} onChange={form.setDelivery}>
               <MenuItem value="">-- Unesite tip dostave --</MenuItem>
               <MenuItem value="Paketna dostava">Paketna dostava</MenuItem>
               <MenuItem value="Prijevoz isporučitelja">Prijevoz isporučitelja</MenuItem>
@@ -148,7 +96,7 @@ function OrderForm() {
           {/* Order type */}
           <FormControl fullWidth sx={{ mb: 3 }}>
             <InputLabel>Tip narudžbe</InputLabel>
-            <Select label="Tip narudžbe" value={form.orderType} onChange={setOrderType}>
+            <Select label="Tip narudžbe" value={form.orderType} onChange={form.setOrderType}>
               <MenuItem value="">-- Odaberite tip narudžbe --</MenuItem>
               <MenuItem value="Roba">Roba</MenuItem>
               <MenuItem value="Usluga">Usluga</MenuItem>
@@ -160,7 +108,7 @@ function OrderForm() {
             fullWidth
             label="Evidencijski broj"
             value={form.recordNumber}
-            onChange={setRecordNumber}
+            onChange={form.setRecordNumber}
             sx={{ mb: 3 }}
           />
 
@@ -169,7 +117,7 @@ function OrderForm() {
             fullWidth
             label="Pozicija iz proračuna"
             value={form.budgetPosition}
-            onChange={setBudgetPosition}
+            onChange={form.setBudgetPosition}
             sx={{ mb: 3 }}
           />
 
@@ -178,26 +126,43 @@ function OrderForm() {
             fullWidth
             label="Narudžbu inicirao i odobrio"
             value={form.approvedBy}
-            onChange={setApprovedBy}
+            onChange={form.setApprovedBy}
             sx={{ mb: 4 }}
           />
 
           {/* Items placeholder */}
           <Box mb={3}>
-            <Typography variant="h6">Stavke</Typography>
-            {/* Item components would go here */}
+            <Typography variant="h6" mb={1}>Stavke ({form.items.length})</Typography>
           </Box>
+
+          {form.items.map((item, index) => {
+            return (
+              <Paper key={item.uuid} elevation={3} sx={{ p: 2, mb: 3 }}>
+                <Stack spacing={2} mb={3}>
+                  <Typography
+                    fontWeight="bold"
+                    sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}
+                  >
+                    Stavka {index + 1}
+                    <IconButton onClick={() => form.deleteItem(item.uuid)}>
+                      <DeleteIcon />
+                    </IconButton>
+                  </Typography>
+                  <TextField label="OIB dobavljača" value={form.supplier.oib} onChange={form.setSupplierOib} />
+                  <TextField label="Naziv dobavljača" value={form.supplier.oib} onChange={form.setSupplierName} />
+                  <TextField label="Adresa dobavljača" value={form.supplier.oib} onChange={form.setSupplierAddress} />
+                </Stack>
+              </Paper>
+            )
+          })}
 
           {/* Buttons */}
           <Stack direction="row" spacing={2} mb={2}>
-            <Button variant="contained">Dodaj stavku</Button>
-            <Button variant="contained" color="error">
-              Ukloni posljednju stavku
-            </Button>
+            <Button variant="contained" onClick={form.addItem}>Dodaj stavku</Button>
             <Button variant="contained" color="warning">
               Prikaži spremljene podatke
             </Button>
-            <Button variant="contained" color="warning" onClick={resetForm}>
+            <Button variant="contained" color="warning" onClick={form.resetForm}>
               Očisti formu
             </Button>
             <Button variant="contained" color="success">

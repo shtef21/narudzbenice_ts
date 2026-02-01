@@ -13,6 +13,14 @@ export type DeliveryType = 'Packet delivery' | 'Supplier delivery' | 'Customer d
 
 export type OrderType = 'Goods' | 'Services' | ''
 
+export type ItemType = {
+    uuid: string
+    name: string
+    amount: number | null
+    priceNoPdv: number | null
+    pdvPtc: number | null
+}
+
 export type OrderFormContextType = {
     id: number
     customer: CustomerType
@@ -24,6 +32,7 @@ export type OrderFormContextType = {
     recordNumber: string
     budgetPosition: string
     approvedBy: string
+    items: ItemType[]
 }
 
 export type OrderFormAction =
@@ -42,6 +51,8 @@ export type OrderFormAction =
     | { type: 'setRecordNumber'; payload: string }
     | { type: 'setBudgetPosition'; payload: string }
     | { type: 'setApprovedBy'; payload: string }
+    | { type: 'addItem' }
+    | { type: 'deleteItem'; payload: string }
     | { type: 'resetForm' }
 
     

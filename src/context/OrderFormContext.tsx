@@ -1,5 +1,13 @@
 import { createContext, useContext, useReducer } from "react";
-import type { FormContextPropsType, OrderFormAction, OrderFormContextType, OrderFormContextValue } from "./orderForm.types";
+import type { FormContextPropsType, ItemType, OrderFormAction, OrderFormContextType, OrderFormContextValue } from "./orderForm.types";
+
+const generateEmptyItem = (): ItemType => ({
+    uuid: crypto.randomUUID(),
+    name: '',
+    amount: null,
+    priceNoPdv: null,
+    pdvPtc: null
+})
 
 const initialValue: OrderFormContextType = {
     id: 1,
@@ -21,6 +29,7 @@ const initialValue: OrderFormContextType = {
     recordNumber: '',
     budgetPosition: '',
     approvedBy: '',
+    items: [generateEmptyItem()]
 }
 
 export const reducer = (state: OrderFormContextType, action: OrderFormAction): OrderFormContextType => {
@@ -76,6 +85,10 @@ export const reducer = (state: OrderFormContextType, action: OrderFormAction): O
         return { ...state, budgetPosition: action.payload }
     case 'setApprovedBy':
         return { ...state, approvedBy: action.payload }
+    case 'addItem':
+        return { ...state, items: [...state.items, generateEmptyItem() ]}
+    case 'deleteItem':
+        return { ...state, items: state.items.filter((item) => item.uuid !== action.payload)}
     case 'resetForm':
         return initialValue
     default:
