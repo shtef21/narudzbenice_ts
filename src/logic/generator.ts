@@ -2,8 +2,10 @@ import { useMemo, useState } from "react";
 import { useOrderFormContext } from "../context/OrderFormContext"
 import type { OrderFormCalculatedType, OrderFormContextBaseType } from "../context/orderForm.types";
 import { formatDate } from "./utils";
+import { usePdfMaker } from "./PdfMaker";
 
 export const useGenerator = () => {
+    const { makePdf } = usePdfMaker()
     const { state: form } = useOrderFormContext();
     const calculatedForm = useMemo<OrderFormCalculatedType>(() => {
         const calculatedItems = form.items.map((item) => {
@@ -65,7 +67,7 @@ export const useGenerator = () => {
         Datum: ${formatDate(calculatedForm.createdAt)}
         `.trim().replaceAll(/\n        /g, '\n'))
 
-    const generatePdf = () => alert('Not yet implemented')
+    const generatePdf = () => makePdf(form.registryNumber)
 
     return {
         previewText,
