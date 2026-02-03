@@ -9,8 +9,8 @@ export const useGenerator = () => {
     const { state: form } = useOrderFormContext();
     const calculatedForm = useMemo<OrderFormCalculatedType>(() => {
         const calculatedItems = form.items.map((item) => {
-            const totalNoPdv = item.priceNoPdv * item.amount
-            const totalPdvAmount = totalNoPdv * (item.pdvPtc / 100)
+            const totalNoPdv = (item.priceNoPdv || 0) * (item.amount || 0)
+            const totalPdvAmount = totalNoPdv * ((item.pdvPtc || 0) / 100)
             const totalWithPdv = totalNoPdv + totalPdvAmount
             return {
                 ...item,

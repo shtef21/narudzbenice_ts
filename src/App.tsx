@@ -1,16 +1,14 @@
-import React, { useMemo } from 'react'
+import React, { useState } from 'react'
 import { OrderForm } from './order/OrderForm'
 import { Alert, IconButton, Snackbar, type SnackbarCloseReason } from '@mui/material'
 import CloseIcon from '@mui/icons-material/Close';
-import { useFormValidator } from './logic/formValidator';
+import { OrderFormContextProvider } from './context/OrderFormContext';
 // import reactLogo from './assets/react.svg'
 
 export const App = () => {
-  const { snackbarMessage, clearSnackbarMessage } = useFormValidator()
-  const snackbarOpen = useMemo(
-    () => snackbarMessage?.length > 0,
-    [snackbarMessage],
-  )
+  const [alertMessage, setAlertMessage] = useState('')
+  
+  const showAlert = (message: string) => setAlertMessage(message)
 
   const handleSnackbarClose = (
     _event: React.SyntheticEvent | Event,
@@ -19,16 +17,15 @@ export const App = () => {
     if (reason === 'clickaway') {
       return
     }
-    clearSnackbarMessage()
+    setAlertMessage('')
   }
 
   return (
-    <>
-      <OrderForm />
+    <OrderFormContextProvider>
+      <OrderForm showAlert={showAlert} />
       <Snackbar
-        open={snackbarOpen}
+        open={alertMessage.length > 0}
         onClose={handleSnackbarClose}
-        message={snackbarMessage}
         sx={{ whiteSpace: 'pre-line' }}
         action={
           <IconButton
@@ -47,9 +44,9 @@ export const App = () => {
           variant="filled"
           sx={{ width: '100%' }}
         >
-          {snackbarMessage}
+          {alertMessage}
         </Alert>
       </Snackbar>
-    </>
+    </OrderFormContextProvider>
   )
 }

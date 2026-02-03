@@ -4,9 +4,9 @@ import type { FormContextPropsType, ItemType, OrderFormAction, OrderFormContextT
 const generateEmptyItem = (): ItemType => ({
     uuid: crypto.randomUUID(),
     name: '',
-    amount: 0,
-    priceNoPdv: 0,
-    pdvPtc: 0
+    amount: null,
+    priceNoPdv: null,
+    pdvPtc: null
 })
 
 const initialValue: OrderFormContextType = {

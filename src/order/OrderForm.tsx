@@ -20,23 +20,32 @@ import { useFormManager } from "../logic/formManager";
 import { useGenerator } from "../logic/generator";
 import { useFormValidator } from "../logic/formValidator";
 
-export const OrderForm = () => {
+type OrderFormProps = {
+  showAlert: (message: string) => void
+}
+
+export const OrderForm = ({ showAlert }: OrderFormProps) => {
   const form = useFormManager()
   const { previewText, clearText, generateText, generatePdf } = useGenerator()
   const { validateForm } = useFormValidator()
 
   const handleTextGenerateClick = () => {
-    if (validateForm()) {
-      generateText()
-    } else {
+    const errorMessage = validateForm()
+    if (errorMessage) {
       clearText()
+      showAlert(errorMessage)
+    } else {
+      generateText()
     }
   }
 
   const handlePdfGenerateClick = () => {
-    if (validateForm()) {
-      generatePdf()
+    const errorMessage = validateForm()
+    if (errorMessage) {
+      clearText()
+      showAlert(errorMessage)
     } else {
+      generatePdf()
     }
   }
 

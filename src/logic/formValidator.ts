@@ -1,13 +1,9 @@
-import { useState } from "react"
 import { useOrderFormContext } from "../context/OrderFormContext"
 
 export const useFormValidator = () => {
     const { state: form } = useOrderFormContext()
-    const [snackbarMessage, setSnackbarMessage] = useState('')
 
-    const clearSnackbarMessage = () => setSnackbarMessage('')
-
-    const validateForm = () => {
+    const validateForm = (): string => {
         const mainErrors: string[] = []
         const itemErrors: string[] = []
 
@@ -44,23 +40,19 @@ export const useFormValidator = () => {
         }
 
         form.items.forEach((item, index) => {
-            if (!item.name) {
-                itemErrors.push(`- Nedostaju podaci stavke ${index + 1}`)
+            if (!item.name || item.amount === null || item.priceNoPdv === null || item.pdvPtc === null) {
+                itemErrors.push(`- Nedostaju naziv ili iznosi stavke ${index + 1}`)
             }
         })
 
         const finalErrorList = [...mainErrors, ...itemErrors]
-        setSnackbarMessage(
-            finalErrorList.length === 0
+        const validationMessage = finalErrorList.length === 0
             ? ''
             : 'Nisu uneseni svi podaci!\n\n' + finalErrorList.join('\n')
-        )
-        return finalErrorList.length === 0
+        return validationMessage
     }
 
     return {
-        snackbarMessage,
-        clearSnackbarMessage,
         validateForm,
     }
 }

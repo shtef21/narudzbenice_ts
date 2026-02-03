@@ -16,9 +16,9 @@ export type OrderType = 'Roba' | 'Usluga' | ''
 export type ItemType = {
     uuid: string
     name: string
-    amount: number
-    priceNoPdv: number
-    pdvPtc: number
+    amount: number | null
+    priceNoPdv: number | null
+    pdvPtc: number | null
 }
 
 type ItemCalculatedType = ItemType & {
