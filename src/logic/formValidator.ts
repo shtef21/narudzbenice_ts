@@ -2,15 +2,65 @@ import { useState } from "react"
 import { useOrderFormContext } from "../context/OrderFormContext"
 
 export const useFormValidator = () => {
-    const { state: _form } = useOrderFormContext()
-    const [snackbarMessage, _setSnackbarMessage] = useState('Form aint correct\n\nPlease make it correct')
+    const { state: form } = useOrderFormContext()
+    const [snackbarMessage, setSnackbarMessage] = useState('')
+
+    const clearSnackbarMessage = () => setSnackbarMessage('')
 
     const validateForm = () => {
-        return Math.random() < 0.5
+        const mainErrors: string[] = []
+        const itemErrors: string[] = []
+
+        const { customer } = form
+        if(!customer.oib || !customer.name || !customer.address || !customer.email) {
+            mainErrors.push('- Nepotpuni podaci naručitelja')
+        }
+
+        const { supplier } = form
+        if (!supplier.oib || !supplier.name || !supplier.address) {
+            mainErrors.push('- Nepotpuni podaci dobavljača')
+        }
+
+        if (!form.registryNumber) {
+            mainErrors.push('- Nedostaje urudžbeni broj')
+        }
+        if (!form.class) {
+            mainErrors.push('- Nedostaje klasa narudžbe')
+        }
+        if (!form.delivery) {
+            mainErrors.push('- Nedostaje dostava')
+        }
+        if (!form.orderType) {
+            mainErrors.push('- Nedostaje tip narudžbe')
+        }
+        if (!form.recordNumber) {
+            mainErrors.push('- Nedostaje evidencijski broj')
+        }
+        if (!form.budgetPosition) {
+            mainErrors.push('- Nedostaje pozicija iz proračuna')
+        }
+        if (!form.approvedBy) {
+            mainErrors.push('- Nedostaje osoba koja odobrava narudžbu')
+        }
+
+        form.items.forEach((item, index) => {
+            if (!item.name) {
+                itemErrors.push(`- Nedostaju podaci stavke ${index + 1}`)
+            }
+        })
+
+        const finalErrorList = [...mainErrors, ...itemErrors]
+        setSnackbarMessage(
+            finalErrorList.length === 0
+            ? ''
+            : 'Nisu uneseni svi podaci!\n\n' + finalErrorList.join('\n')
+        )
+        return finalErrorList.length === 0
     }
 
     return {
         snackbarMessage,
+        clearSnackbarMessage,
         validateForm,
     }
 }

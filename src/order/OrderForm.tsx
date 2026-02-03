@@ -20,21 +20,16 @@ import { useFormManager } from "../logic/formManager";
 import { useGenerator } from "../logic/generator";
 import { useFormValidator } from "../logic/formValidator";
 
-type OrderFormProps = {
-  openSnackbar: (message: string) => void
-}
-
-export const OrderForm = ({ openSnackbar }: OrderFormProps) => {
+export const OrderForm = () => {
   const form = useFormManager()
   const { previewText, clearText, generateText, generatePdf } = useGenerator()
-  const { snackbarMessage, validateForm } = useFormValidator()
+  const { validateForm } = useFormValidator()
 
   const handleTextGenerateClick = () => {
     if (validateForm()) {
       generateText()
     } else {
       clearText()
-      openSnackbar(snackbarMessage)
     }
   }
 
@@ -42,7 +37,6 @@ export const OrderForm = ({ openSnackbar }: OrderFormProps) => {
     if (validateForm()) {
       generatePdf()
     } else {
-      openSnackbar(snackbarMessage)
     }
   }
 
@@ -208,13 +202,13 @@ export const OrderForm = ({ openSnackbar }: OrderFormProps) => {
 
 
           {/* Buttons */}
-          <Stack direction="row" spacing={2} mb={2}>
+          <Box sx={{ display: 'flex', gap: 2, mb: 2 }}>
             <Chip label="Dodaj stavku" color="primary" onClick={form.addItem} />
             <Chip label="Očisti formu" color="error" onClick={form.resetForm} />
             <Chip label="Prikaži spremljene podatke" color="warning" onClick={() => {}} />
             <Chip label="Testni podaci" color="success" onClick={form.mockForm} />
             <Chip label="Prikaži tekst" color="success" onClick={handleTextGenerateClick} />
-          </Stack>
+          </Box>
 
           <Button
             fullWidth
