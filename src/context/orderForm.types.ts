@@ -21,7 +21,7 @@ export type ItemType = {
     pdvPtc: number | null
 }
 
-type ItemCalculatedType = ItemType & {
+export type ItemCalculatedType = ItemType & {
     totalNoPdv: number
     totalPdvAmount: number
     totalWithPdv: number

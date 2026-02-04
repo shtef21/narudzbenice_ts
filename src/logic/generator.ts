@@ -67,7 +67,7 @@ export const useGenerator = () => {
         Datum: ${formatDate(calculatedForm.createdAt)}
         `.trim().replaceAll(/\n        /g, '\n'))
 
-    const generatePdf = () => makePdf(form.registryNumber)
+    const generatePdf = () => makePdf(calculatedForm)
 
     return {
         previewText,

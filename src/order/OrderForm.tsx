@@ -185,14 +185,14 @@ export const OrderForm = ({ showAlert }: OrderFormProps) => {
                 <TextField
                   label="Količina"
                   type="number"
-                  value={item.amount}
+                  value={item.amount || ''}
                   onChange={(e) => form.setItemAmount(item.uuid, Number(e.target.value))}
                   fullWidth
                 />
                 <TextField
                   label="Cijena bez PDV-a"
                   type="number"
-                  value={item.priceNoPdv}
+                  value={item.priceNoPdv || ''}
                   onChange={(e) =>
                     form.setItemPriceNoPdv(item.uuid, Number(e.target.value))
                   }
@@ -201,7 +201,7 @@ export const OrderForm = ({ showAlert }: OrderFormProps) => {
                 <TextField
                   label="PDV (%)"
                   type="number"
-                  value={item.pdvPtc}
+                  value={item.pdvPtc || ''}
                   onChange={(e) => form.setItemPdvPtc(item.uuid, Number(e.target.value))}
                   fullWidth
                 />
