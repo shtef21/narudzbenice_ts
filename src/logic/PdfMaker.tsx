@@ -18,7 +18,7 @@ const styles = StyleSheet.create({
   page: {
     padding: 40,
     fontSize: 10,
-    fontFamily: 'Helvetica'
+    // fontFamily: 'Helvetica'  <-- By default it's Helvetica. TODO - Embed Times New Roman or smth
   },
 
   // Logo
@@ -49,7 +49,8 @@ const styles = StyleSheet.create({
 
   // Right column (buyer info)
   rightColumn: {
-    marginLeft: 240
+    marginLeft: 240,
+    marginBottom: 10,
   },
 
   section: {
